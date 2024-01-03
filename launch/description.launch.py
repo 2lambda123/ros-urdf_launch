@@ -1,5 +1,5 @@
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, SetParameter
 from launch.substitutions import Command
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 
@@ -15,6 +15,11 @@ def generate_launch_description():
                                         description='The package where the robot description is located'))
     ld.add_action(DeclareLaunchArgument('urdf_package_path',
                                         description='The path to the robot description relative to the package root'))
+    ld.add_action(DeclareLaunchArgument('use_sim_time',
+                                        default_value='false',
+                                        choices=['true', 'false'],
+                                        description='Use simulation clock if true'))
+    SetParameter(name='use_sim_time', value=LaunchConfiguration('use_sim_time'))
 
     package_dir = FindPackageShare(LaunchConfiguration('urdf_package'))
     urdf_path = PathJoinSubstitution([package_dir, LaunchConfiguration('urdf_package_path')])
